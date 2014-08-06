@@ -1,0 +1,38 @@
+{
+  "name": "go-interstitial",
+  "version": "0.0.1",
+  "description": "Interstitial proof of concept application",
+  "main": "go-app-interstitial.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/westerncapelabs/go-interstitial"
+  },
+  "keywords": [
+    "vumi",
+    "sandbox"
+  ],
+  "author": "Western Cape Labs",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/westerncapelabs/go-interstitial/issues"
+  },
+  "homepage": "https://github.com/westerncapelabs/go-interstitial",
+  "dependencies": {
+    "vumigo_v02": "~0.2",
+    "q": "~0.9",
+    "lodash": "~2.4.1"
+  },
+  "devDependencies": {
+    "mocha": "~1.18",
+    "jshint": "~2.4.4",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-watch": "~0.6.0",
+    "grunt": "~0.4.4",
+    "grunt-mocha-test": "~0.10.0",
+    "grunt-contrib-jshint": "~0.9.2",
+    "grunt-cli": "~0.1.13"
+  }
+}
