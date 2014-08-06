@@ -75,11 +75,11 @@ describe("app", function() {
         });
 
         describe("when the user selected a drink type but is restarting session", function() {
-            it.skip("should ask if continue or restart", function() {
+            it("should ask if continue or restart", function() {
                 return tester
                     .setup.user.addr('+27001')
+                    .setup.user.state('states_type')
                     .input.session_event('new')
-                    .input('1')
                     .check.interaction({
                         state: 'states_timed_out',
                         reply: [

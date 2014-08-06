@@ -1,5 +1,6 @@
 go.app = function() {
     var vumigo = require('vumigo_v02');
+    var _ = require('lodash');
     var App = vumigo.App;
     var Choice = vumigo.states.Choice;
     var ChoiceState = vumigo.states.ChoiceState;
@@ -10,17 +11,26 @@ go.app = function() {
         App.call(self, 'states_start');
         var $ = self.$;
 
-        // var add =  self.states.add;
-        // self.states.add = function(name, creator) {
-        //     return add(name, function(name, opts) {
-        //         if (self.im.msg.session_event === 'new')
-        //             return self.states.create('states_timed_out', {name: name});
-     
-        //         return creator(name, opts);
-        //     });
-        // };
+        function timed_out() {
+            return self.im.msg.session_event === 'new'
+                && self.im.user.state.name
+                && self.im.user.state.name !== 'states_start';
+        }
 
-        self.states.add('states_start', function(name) {
+        function add(name, creator) {
+            self.states.add(name, function(name, opts) {
+                opts = _.defaults(opts || {}, {in_header: true});
+
+                if (!opts.in_header || !timed_out())
+                    return creator(name, opts);
+
+                opts.name = name;
+                opts.in_header = false;
+                return self.states.create('states_timed_out', opts);
+            });
+        }
+
+        add('states_start', function(name) {
             return new ChoiceState(name, {
                 question: $('Please choose a drink type'),
 
@@ -41,7 +51,7 @@ go.app = function() {
             });
         });
 
-        self.states.add('states_type', function(name, creator_opts) {
+        add('states_type', function(name, creator_opts) {
             return new ChoiceState(name, {
                 question: $('When do you want your {{drink_type}}?')
                     .context({
@@ -57,7 +67,7 @@ go.app = function() {
             });
         });
 
-        self.states.add('states_end_thanks', function(name) {
+        add('states_end_thanks', function(name) {
             return new EndState(name, {
                 text: $('Thank you. You\'ll get your drink at the time you requested'),
 
@@ -65,7 +75,7 @@ go.app = function() {
             });
         });
 
-        self.states.add('states_timed_out', function(name, creator_opts) {
+        add('states_timed_out', function(name, creator_opts) {
             
             return new ChoiceState(name, {
                 question: $('Do you want to go back to the start or continue?'),
