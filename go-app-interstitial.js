@@ -89,8 +89,11 @@ go.app = function() {
                 ],
 
                 next: function(choice) {
-                        return choice.value;
-                    }
+                    return {
+                        name: choice.value,
+                        creator_opts: creator_opts
+                    };
+                }
             });
         });
 

@@ -92,5 +92,42 @@ describe("app", function() {
             });
         });
 
+        describe("when the user selects a drink type", function() {
+            it("should ask when they want it", function() {
+                return tester
+                    .setup.user.addr('+27001')
+                    .setup.user.state('states_start')
+                    .inputs('1', null, '2')
+                    .check.interaction({
+                        state: 'states_type',
+                        reply: [
+                            'When do you want your coffee?',
+                            '1. Now',
+                            '2. Later'
+                        ].join('\n')
+                    })
+                    .run();
+            });
+        });
+
+         describe("when the user selects a drink type", function() {
+            it("should ask when they want it", function() {
+                return tester
+                    .setup.user.addr('+27001')
+                    .setup.user.state('states_start')
+                    .inputs('1', null, '1')
+                    .check.interaction({
+                        state: 'states_start',
+                        reply: [
+                            'Please choose a drink type',
+                            '1. Coffee',
+                            '2. Tea',
+                            '3. Soft drink'
+                        ].join('\n')
+                    })
+                    .run();
+            });
+        });
+
     });
 });
