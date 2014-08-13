@@ -1,6 +1,5 @@
 go.app = function() {
     var vumigo = require('vumigo_v02');
-    var _ = require('lodash');
     var App = vumigo.App;
     var Choice = vumigo.states.Choice;
     var ChoiceState = vumigo.states.ChoiceState;
@@ -10,6 +9,7 @@ go.app = function() {
     var GoInterstitial = App.extend(function(self) {
         App.call(self, 'states_start');
         var $ = self.$;
+        var interrupt = true;
 
         function timed_out() {
             return self.im.msg.session_event === 'new'
@@ -19,14 +19,11 @@ go.app = function() {
 
         function add(name, creator) {
             self.states.add(name, function(name, opts) {
-                opts = _.defaults(opts || {}, {in_header: true});
-
-                if (!opts.in_header || !timed_out())
+                if (!interrupt || !timed_out())
                     return creator(name, opts);
 
-                opts.name = name;
-                opts.in_header = false;
-                return self.states.create('states_timed_out', opts);
+                interrupt = false;
+                return self.states.create('states_timed_out', {name: name});
             });
         }
 
