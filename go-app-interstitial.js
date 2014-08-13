@@ -26,7 +26,9 @@ go.app = function() {
                     return creator(name, opts);
 
                 interrupt = false;
-                return self.states.create('states_timed_out', {name: name});
+                opts = opts || {};
+                opts.name = name;
+                return self.states.create('states_timed_out', opts);
             });
         }
 
